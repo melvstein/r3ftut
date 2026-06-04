@@ -32,7 +32,7 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --text: #9ca3af;
     --text-h: #f3f4f6;
@@ -52,7 +52,7 @@
   }
 }
 
-#root {
+#_root {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
@@ -64,8 +64,15 @@
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
+body,
+html,
+#root{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 h1,

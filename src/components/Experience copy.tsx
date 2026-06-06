@@ -1,0 +1,116 @@
+import { useFrame } from "@react-three/fiber"
+import { useRef } from "react"
+import * as THREE from "three"
+import { Html, OrbitControls, TransformControls, PivotControls, Text, Float,
+  MeshReflectorMaterial
+ } from "@react-three/drei"
+
+export default function Experience() {
+  const groupRef = useRef<THREE.Group>(null)
+  const cubeRef = useRef<THREE.Mesh>(null!)
+  const sphereRef = useRef<THREE.Mesh>(null!)
+
+  useFrame((state, delta) => {
+    if (groupRef.current) {
+      // groupRef.current.rotation.y += delta * 0.1
+    }
+
+    // cubeRef.current.rotation.y += delta * 0.5
+
+    /* const angle = state.clock.elapsedTime * 0.1;
+    state.camera.position.x = Math.cos(angle) * 8
+    state.camera.position.z = Math.sin(angle) * 8
+    state.camera.lookAt(0, 0, 0) */
+  })
+
+  return (
+    <>
+      <OrbitControls makeDefault />
+      <directionalLight position={[1, 2, 3]} intensity={10} />
+      <ambientLight color={"blue"} intensity={0.5} />
+
+      <group ref={ groupRef } position-y={ 1 }>
+        <PivotControls
+          anchor={ [0, 0, 0] }
+          depthTest={ false }
+          lineWidth={ 2 }
+          scale={ 2 }
+          fixed={ false }
+        >
+          <mesh ref={ sphereRef } position-x={ -3 }>
+            <sphereGeometry />
+            <meshStandardMaterial 
+              color="orange"
+            />
+          <Html
+            position={ [1, 1, 0] }
+            wrapperClass="sphere"
+            center
+            occlude={ [ cubeRef, sphereRef ] }
+          >
+            Hello World
+          </Html>
+          </mesh>
+        </PivotControls>
+
+        <mesh ref={ cubeRef } rotation-y={ Math.PI * 0.25 } position-x={ 3 }>
+          <boxGeometry />
+          <meshStandardMaterial 
+            color="blue"
+          />
+        </mesh>
+        <TransformControls object={ cubeRef } />
+      </group>
+
+      {/* <CustomGeometry /> */}
+
+      <mesh ref={ cubeRef } rotation-y={ Math.PI * 0.25 } position-x={ 1 }>
+        <boxGeometry />
+        <meshStandardMaterial 
+          color="blue"
+        />
+      </mesh>
+
+      <mesh
+        position-y={ - 1 }
+        rotation-x={ - Math.PI * 0.5 }
+        scale={ 10 }
+      >
+        <planeGeometry />
+        {/* <meshStandardMaterial 
+          color="greenyellow"
+          side={THREE.DoubleSide}
+        /> */}
+        <MeshReflectorMaterial
+          resolution={ 1024 }
+          blur={ [ 300, 100 ] }
+          mixBlur={ 1 }
+          mixStrength={ 1.5 }
+          roughness={ 1 }
+          depthScale={ 1.2 }
+          minDepthThreshold={ 0.4 }
+          maxDepthThreshold={ 1.4 }
+          color="#101010"
+          metalness={ 0.5 }
+          mirror={ 1 }
+        />
+      </mesh>
+
+      <Float
+        speed={ 5 }
+        rotationIntensity={ 1 }
+        floatIntensity={ 2 }
+      >
+        <Text
+          font="/fonts/woff/FiraCode-Regular.woff"
+          fontSize={ 5 }
+          color="blue"
+          maxWidth={ 2 }
+          textAlign="center"
+        >
+          Melvstein
+        </Text>
+      </Float>
+    </>
+  )
+}

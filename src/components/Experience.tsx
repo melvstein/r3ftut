@@ -126,7 +126,7 @@ export default function Experience() {
     preset: {
       options: ["sunset", "dawn", "night", "warehouse", "apartment", "studio", "city", "forest", "lobby", "park"],
     },
-  }, { collapsed: false })
+  }, { collapsed: true })
 
 /* 
   const scene = useThree(state => state.scene)

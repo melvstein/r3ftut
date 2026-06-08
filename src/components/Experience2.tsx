@@ -1,5 +1,5 @@
-import { useFrame, useThree, useLoader } from "@react-three/fiber"
-import { Suspense, useEffect, useRef } from "react"
+import { useFrame, useThree } from "@react-three/fiber"
+import { useEffect, useRef } from "react"
 import * as THREE from "three"
 import {
   OrbitControls,
@@ -17,9 +17,6 @@ import {
 
 import { useControls, button } from "leva"
 import { Perf } from "r3f-perf"
-import Burger from "./models/Burger"
-import Fallback from "./Fallback"
-import Fox from "./models/Fox"
 
 export default function Experience() {
   const groupRef = useRef<THREE.Group>(null)
@@ -149,7 +146,7 @@ export default function Experience() {
     }
     
     // cubeRef.current.position.x = 2 + Math.sin(time) * 1
-    // cubeRef.current.rotation.y += delta * 0.5
+    cubeRef.current.rotation.y += delta * 0.5
 
     /* const angle = state.clock.elapsedTime * 0.1;
     state.camera.position.x = Math.cos(angle) * 8
@@ -218,7 +215,7 @@ export default function Experience() {
         frames={1}
       /> */}
 
-      <directionalLight
+      {/* <directionalLight
         ref={directionalLightRef}
         position={skySettings.sunPosition}
         intensity={5}
@@ -232,31 +229,81 @@ export default function Experience() {
         shadow-camera-left={ -5 }
       />
       
-      <ambientLight color={"blue"} intensity={0.5} />
+      <ambientLight color={"blue"} intensity={0.5} /> */}
 
       {/* <Sky
         sunPosition={skySettings.sunPosition}
       /> */}
 
-      <Suspense
-        fallback={<Fallback />}
+      {/* <mesh
+        ref={ sphereRef }
+        position-x={ -3 }
+        position-y={ 1 }
+        castShadow
       >
-        <Burger />
-        <Fox />
-      </Suspense>
-      
+        <sphereGeometry />
+        <meshStandardMaterial 
+          color="orange"
+        />
+      </mesh>
       <mesh
+        ref={ cubeRef }
+        position={ [ position.x, position.y, 0 ] }
+        position-y={ 1 }
+        visible={ visible }
+        castShadow
+      >
+        <boxGeometry />
+        <meshStandardMaterial 
+          color={color}
+        />
+      </mesh> */}
+      {/* <mesh
         position-y={ - 1 }
         rotation-x={ - Math.PI * 0.5 }
         scale={ 10 }
-        receiveShadow
       >
         <planeGeometry />
         <meshStandardMaterial 
           color="greenyellow"
           side={THREE.DoubleSide}
         />
-      </mesh>
+      </mesh> */}
+
+      <Stage
+        shadows={{
+          type: 'contact',
+          resolution: contactShadowSettings.resolution,
+          far: contactShadowSettings.far,
+          color: contactShadowSettings.color,
+          opacity: contactShadowSettings.opacity,
+          blur: contactShadowSettings.blur,
+          frames: 1,
+        }}
+        environment="sunset"
+        preset="portrait"
+      >
+        <mesh
+          ref={ sphereRef }
+          position-x={ -3 }
+          position-y={ 1 }
+        >
+          <sphereGeometry />
+          <meshStandardMaterial 
+            color="orange"
+          />
+        </mesh>
+        <mesh
+          ref={ cubeRef }
+          position={ [ position.x, position.y, 0 ] }
+          visible={ visible }
+        >
+          <boxGeometry />
+          <meshStandardMaterial 
+            color={color}
+          />
+        </mesh>
+      </Stage>
     </>
   )
 }

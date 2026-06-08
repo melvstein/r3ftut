@@ -13,23 +13,26 @@ function App() {
 
   const cameraSettings = {
     position: [3, 2, 6] as const,
-    fov: 100,
+    fov: 45,
     near: 0.1,
     far: 200,
+    zoom: 100,
   }
 
   return (
     <>
       <Leva collapsed />
       <Canvas
+        orthographic
         camera={ cameraSettings }
         gl={{ 
           antialias: true,
           toneMapping: THREE.ACESFilmicToneMapping,
           outputColorSpace: THREE.SRGBColorSpace,
         }}
-        // shadows
+        shadows
       >
+        <color args={["ivory"]} attach="background" />
         <Experience />
       </Canvas>
     </>

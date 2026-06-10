@@ -1,112 +1,87 @@
 import { 
   OrbitControls,
+  useCursor,
   useGLTF,
-  useTexture,
-  Center,
-  Sparkles,
-  shaderMaterial,
+  meshBounds,
  } from "@react-three/drei";
 import { Perf } from "r3f-perf";
+import { useRef, useState } from "react";
 import * as THREE from "three";
-import portalVertexShader from "../shaders/portal/vertex.glsl"
-import portalFragmentShader from "../shaders/portal/fragment.glsl"
-import { extend, type ThreeElement, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
-
-const PortalMaterial = shaderMaterial(
-  {
-    uTime: 0,
-    uColorStart: new THREE.Color("#ffffff"),
-    uColorEnd: new THREE.Color("#0000ff"),
-  },
-  portalVertexShader,
-  portalFragmentShader
-);
-
-extend({ PortalMaterial });
-
-declare module "@react-three/fiber" {
-  interface ThreeElements {
-    portalMaterial: ThreeElement<typeof PortalMaterial>;
-  }
-}
+import { useFrame, type ThreeEvent } from "@react-three/fiber";
 
 export default function Experience() {
-  const portalModel = useGLTF("./models/portal/portal.glb");
-  const bakedTexture = useTexture("./models/portal/baked.jpg");
-  const portalMaterialRef = useRef<THREE.ShaderMaterial>(null!);
+  const [hovered, setHovered] = useState<string | null>(null);
+  useCursor(hovered !== null );
 
-  /* const bakedTextureMemo = useMemo(() => {
-    const texture = bakedTexture.clone();
-    texture.flipY = false;
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.needsUpdate = true;
-    return texture;
-  }, [bakedTexture]); */
+  const cubeRef = useRef<THREE.Mesh<THREE.BoxGeometry, THREE.MeshStandardMaterial>>(null);
+  const hamburger = useGLTF("./models/hamburger.glb");
+
+  const eventHandler = (event: ThreeEvent<MouseEvent>) => {
+    console.log("Clicked on the cube", event);
+    const color = `hsl(${Math.random() * 360}, 100%, 75%)`;
+    console.log("Changing cube color to", color);
+    cubeRef.current?.material.color.set(color);
+  }
 
   useFrame((state, delta) => {
-    if (portalMaterialRef.current) {
-      portalMaterialRef.current.uTime += delta;
+    if (cubeRef.current) {
+      cubeRef.current.rotation.y += delta * 0.2;
     }
-  })
+  });
 
   return (
     <>
+      <color args={["ivory"]} attach="background" />
       <Perf position="top-left" />
-      <color args={["#030202"]} attach="background" />
       <OrbitControls makeDefault />
+      <directionalLight position={[1, 2, 3]} intensity={1.5} />
+      <ambientLight color={"blue"} intensity={0.5} />
 
-      <Center>
-        <mesh
-          geometry={(portalModel.nodes.baked as THREE.Mesh).geometry}
-        >
-          <meshBasicMaterial
-            map={bakedTexture}
-            map-flipY={false}
-          />
-        </mesh>
-        <mesh
-          geometry={(portalModel.nodes.portalLight as THREE.Mesh).geometry}
-          position={portalModel.nodes.portalLight.position}
-          rotation={portalModel.nodes.portalLight.rotation}
-        >
-          <portalMaterial ref={portalMaterialRef} />
-        </mesh>
-        <mesh
-          geometry={(portalModel.nodes.poleLightA as THREE.Mesh).geometry}
-          position={portalModel.nodes.poleLightA.position}
-        >
-          <meshBasicMaterial
-            color={"#0000ff"}
-          />
-        </mesh>
-        <mesh
-          geometry={(portalModel.nodes.poleLightB as THREE.Mesh).geometry}
-          position={portalModel.nodes.poleLightB.position}
-        >
-          <meshBasicMaterial
-            color={"#0000ff"}
-          />
-        </mesh>
-
-        <Sparkles
-          size={10}
-          scale={[0.8, 0.8, 0]}
-          position={[0, 0.9, -1.7]}
-          speed={0.5}
-          count={40}
-          color={"#0000ff"}
+      <mesh
+        ref={cubeRef}
+        raycast={meshBounds}
+        position-x={2}
+        onClick={eventHandler}
+        onPointerEnter={() => setHovered("cube")}
+        onPointerLeave={() => setHovered(null)}
+      >
+        <boxGeometry />
+        <meshStandardMaterial
+          color={ hovered === "cube" ? 'hotpink' : 'blue'}
         />
+      </mesh>
 
-        <Sparkles
-          size={6}
-          scale={[4, 2, 4]}
-          position-y={1}
-          speed={0.5}
-          count={40}
-          color={"#00ffff"}
-        />
-      </Center>
+      <mesh
+        position-x={-2}
+        onClick={(event) => event.stopPropagation()}
+        onPointerEnter={() => setHovered("sphere")}
+        onPointerLeave={() => setHovered(null)}
+      >
+        <sphereGeometry />
+        <meshStandardMaterial color="red" />
+      </mesh>
+
+      <primitive
+        object={hamburger.scene}
+        scale={0.2}
+        position-y={2}
+        rotation-y={Math.PI * 0.25}
+        onClick={(event: ThreeEvent<MouseEvent>) => {
+          event.stopPropagation();
+          console.log(event.object.name);
+        }}
+        onPointerEnter={() => setHovered("hamburger")}
+        onPointerLeave={() => setHovered(null)}
+      />
+
+      <mesh
+        position-y={-1}
+        rotation-x={-Math.PI * 0.5}
+        scale={10}
+      >
+        <planeGeometry />
+        <meshStandardMaterial color="greenyellow" />
+      </mesh>
     </>
   )
 }

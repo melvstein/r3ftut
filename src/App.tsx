@@ -1,7 +1,11 @@
-import { Canvas, type RootState } from '@react-three/fiber'
+import { 
+  Canvas,
+  type RootState,
+} from '@react-three/fiber'
 import Experience from './components/Experience'
 import * as THREE from 'three'
 import { Leva } from 'leva'
+import { Bvh } from "@react-three/drei";
 
 const created = (state: RootState) => {
   console.log("Canvas created")
@@ -30,11 +34,13 @@ function App() {
           toneMapping: THREE.ACESFilmicToneMapping,
           outputColorSpace: THREE.SRGBColorSpace,
         }}
+        onPointerMissed={() => { console.log("Clicked on the canvas, but not on any object") }}
         shadows
         flat
       >
-        <color args={["ivory"]} attach="background" />
-        <Experience />
+        <Bvh>
+          <Experience />
+        </Bvh>
       </Canvas>
     </>
   )

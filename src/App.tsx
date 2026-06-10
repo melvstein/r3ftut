@@ -38,6 +38,7 @@ function App() {
         shadows
         flat
       >
+        <color args={["white"]} attach="background" />
         <Bvh>
           <Experience />
         </Bvh>

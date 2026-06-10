@@ -31,6 +31,7 @@ function App() {
           outputColorSpace: THREE.SRGBColorSpace,
         }}
         shadows
+        flat
       >
         <color args={["ivory"]} attach="background" />
         <Experience />

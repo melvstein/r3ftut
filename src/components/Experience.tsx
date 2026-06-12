@@ -5,6 +5,7 @@ import {
   Html,
   OrbitControls,
   PresentationControls,
+  Text,
  } from "@react-three/drei";
 
 import { useGLTF, Stage } from "@react-three/drei";
@@ -22,16 +23,27 @@ export default function Experience() {
       <PresentationControls
         rotation={[0.13, 0.1, 0]}
         polar={[-0.4, 0.2]}
+        azimuth={[-0.4, 0.1]}
         damping={ 0.1 }
         snap
         global
       >
         <Float rotationIntensity={0.5}>
+          <rectAreaLight
+            width={2.5}
+            height={1.65}
+            intensity={100}
+            color={"blue"}
+            rotation={[ 1, Math.PI, 0 ]}
+            position={[ 0.55, 0.55, -0.5 ]}
+          />
+
           <primitive 
             object={laptopModel.scene}
+            position-y={-0.4}
             rotation-y={0.5}
             rotation-x={0.2}
-            scale={0.75}
+            scale={0.9}
           >
             <Html
               wrapperClass="htmlScreen"
@@ -43,6 +55,18 @@ export default function Experience() {
               <iframe src="https://melvstein.vercel.app/" />
             </Html>
           </primitive>
+          <Text
+            font="./fonts/woff/FiraCode-Bold.woff"
+            fontSize={0.5}
+            position={[2, 1.5, 1.5]}
+            rotation-y={-1}
+            rotation-x={0.1}
+            color="white"
+            maxWidth={2}
+            textAlign="center"
+          >
+            MELVIN JUSTINE
+          </Text>
         </Float>
       </PresentationControls>
 

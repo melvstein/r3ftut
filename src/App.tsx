@@ -39,7 +39,16 @@ function App() {
         shadows
         flat */
       >
-        <color args={["#64748B"]} attach="background" />
+        {/* 
+          blue-400	#60A5FA
+          blue-500	#3B82F6
+          blue-600	#2563EB
+          blue-700	#1D4ED8
+          blue-800	#1E40AF
+          blue-900	#1E3A8A 
+        */}
+
+        <color args={["#1E3A8A"]} attach="background" />
         <Bvh>
           <Experience />
         </Bvh>

@@ -27,6 +27,7 @@ function App() {
     <>
       <Leva collapsed />
       <Canvas
+        className="touch-none"/* 
         orthographic
         camera={ cameraSettings }
         gl={{ 
@@ -36,9 +37,9 @@ function App() {
         }}
         onPointerMissed={() => { console.log("Clicked on the canvas, but not on any object") }}
         shadows
-        flat
+        flat */
       >
-        <color args={["#695b5b"]} attach="background" />
+        <color args={["#64748B"]} attach="background" />
         <Bvh>
           <Experience />
         </Bvh>

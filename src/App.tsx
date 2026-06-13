@@ -38,6 +38,7 @@ function App() {
         onPointerMissed={() => { console.log("Clicked on the canvas, but not on any object") }}
         shadows
         flat */
+        shadows
       >
         {/* 
           blue-400	#60A5FA
@@ -48,7 +49,8 @@ function App() {
           blue-900	#1E3A8A 
         */}
 
-        <color args={["#1E3A8A"]} attach="background" />
+        {/* <color args={["#1E3A8A"]} attach="background" /> */}
+        <color args={["#ffffff"]} attach="background" />
         <Bvh>
           <Experience />
         </Bvh>
